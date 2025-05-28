@@ -7,8 +7,7 @@ export default class InputManager {
         this.keys[id] = keyBool;
     }
 
-
-    update() {
-        
+    isKeyPressed(id) {
+        return this.keys[id];
     }
 }

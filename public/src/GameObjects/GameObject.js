@@ -1,6 +1,8 @@
-export class GameObject {
-    constructor(p5, x, y, width, height) {
+export default class GameObject {
+    constructor(p5, handlerAsset, inputManager, x, y, width, height) {
         this.p5 = p5;
+        this.handlerAsset = handlerAsset;
+        this.inputManager = inputManager;
         this.x = x;
         this.y = y;
         this.width = width;

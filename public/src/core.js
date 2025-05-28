@@ -2,15 +2,23 @@ import HandlerGameObject from "./GameObjects/HandlerGameObject.js";
 import HandlerUI from "./GameObjects/HandlerUI.js";
 import InputManager from "./Engine/InputManager.js";
 import DebugUI from "./GameObjects/UIElements/DebugUI.js";
+import HandlerAsset from "./GameObjects/HandlerAsset.js";
+
+import Spacecraft from "./GameObjects/Entity/Spacecraft.js";
 
 // config
 const debug = true;
 
 const inputManager = new InputManager();
+const handlerAsset = new HandlerAsset();
 const handlerGameObject = new HandlerGameObject();
 const handlerUI = new HandlerUI();
 
 const sketch = (p) => {
+    p.preload = () => {
+        handlerAsset.add('spacecraft_player', p.loadImage('./public/assets/spacecraft/spacecraft.gif'));
+    }
+
     p.setup = () => {
         p.createCanvas(window.innerWidth, window.innerHeight+1);
         p.frameRate(144);
@@ -19,12 +27,12 @@ const sketch = (p) => {
         if (debug) {
             new DebugUI(p, handlerUI);
         }
+
+        handlerGameObject.add(new Spacecraft(p, handlerAsset, inputManager, 300, 100, 80, 40));
     }
 
     p.draw = () => {
         p.background(0);
-
-        inputManager.update();
 
         handlerGameObject.handler.forEach(gameObjectElement => {
             gameObjectElement.update();

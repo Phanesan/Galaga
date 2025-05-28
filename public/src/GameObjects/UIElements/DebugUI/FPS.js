@@ -22,7 +22,6 @@ export default class FPS extends UIElement {
     update() {
         Utils.intervalTimer(this.p5.frameCount, () => {
             this.fps = this.p5.frameRate().toFixed(2);
-            console.log(this.fps);
         }, 30);
     }
 }
