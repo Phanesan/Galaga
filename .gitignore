@@ -1,0 +1,53 @@
+# Dependencias
+/node_modules
+
+# Variables de entorno
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Archivos de configuración sensible
+*.pem
+*.key
+*.cert
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Directorios de compilación / generados
+/dist
+/build
+/coverage
+/.next
+/.cache
+
+# Configuración del IDE / Editor
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de package managers (opcional)
+package-lock.json  # Si usas Yarn y no quieres subir el lock de npm
+yarn.lock          # Si usas npm y no quieres subir el lock de Yarn
+pnpm-lock.yaml     # Si usas otro gestor
+
+# Testing (opcional)
+/test-results
+/cypress/screenshots
+/cypress/videos
+
+# TypeScript (si usas)
+*.tsbuildinfo
