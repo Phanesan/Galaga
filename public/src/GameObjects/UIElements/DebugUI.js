@@ -9,6 +9,6 @@ export default class DebugUI {
 
     init() {
         this.handlerUI.add(new FPS(this.p5, 40, 60, this.handlerUI));
-        this.handlerUI.add(new Version(this.p5, 40, 880, this.handlerUI));
+        this.handlerUI.add(new Version(this.p5, 40, 740, this.handlerUI));
     }
 }
