@@ -27,7 +27,7 @@ export default class Spacecraft extends GameObject {
         if(this.y < 0) this.y = 0;
         if(this.y + this.height > this.p5.height) this.y = this.p5.height - this.height;
 
-        this.handlerGameObject.getHandler().foreach(object => {
+        this.handlerGameObject.getHandler().forEach(object => {
             if(object !== this && this.intersects(object)) {
                 this.collision(object);
             }

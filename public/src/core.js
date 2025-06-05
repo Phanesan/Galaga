@@ -28,7 +28,7 @@ const sketch = (p) => {
         if (debug) {
             new DebugUI(p, handlerUI);
         }
-
+        
         handlerGameObject.add(new Spacecraft("player", p, handlerAsset, inputManager, handlerGameObject, 300, 100, 80, 40));
     }
 
