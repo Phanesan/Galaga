@@ -26,7 +26,7 @@ export default class EnemyTwo extends GameObject {
     );
 
     // recordar cambiar sprite
-    this.asset = handlerAsset.get("spacecraft_enemy1");
+    this.asset = handlerAsset.get("spacecraft_enemy2");
     // que vida le ponemos?
     this.health = 1;
     this.baseX = x;

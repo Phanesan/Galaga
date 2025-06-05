@@ -27,6 +27,18 @@ const sketch = (p) => {
       "spacecraft_enemy1",
       p.loadImage("./public/assets/spacecraft/enemy1.gif")
     );
+    handlerAsset.add(
+      "spacecraft_enemy2",
+      p.loadImage("./public/assets/enemy_2/1.png")
+    );
+    handlerAsset.add(
+      "spacecraft_enemy3",
+      p.loadImage("./public/assets/enemy_3/1.png")
+    );
+    handlerAsset.add(
+      "spacecraft_boss",
+      p.loadImage("./public/assets/spacecraft/boss2.gif")
+    );
   };
 
   p.setup = () => {
@@ -68,19 +80,17 @@ const sketch = (p) => {
 
     // actualizar nivel (spawnear enemigos escalonadamente)
     levelManager.update();
-    levelManager.checkLevelProgression();
-    levelManager.drawTransition();
 
     // actualizar gameobjects
-    handlerGameObject.handler.forEach((gameObjectElement) => {
-      gameObjectElement.update();
-      gameObjectElement.draw();
+    handlerGameObject.handler.forEach((obj) => {
+      obj.update();
+      obj.draw();
     });
 
     // ui
-    handlerUI.handler.forEach((uiElement) => {
-      uiElement.update();
-      uiElement.draw();
+    handlerUI.handler.forEach((ui) => {
+      ui.update();
+      ui.draw();
     });
 
     // limpiar objetos destruidos
