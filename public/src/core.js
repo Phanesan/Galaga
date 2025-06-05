@@ -17,10 +17,11 @@ const handlerUI = new HandlerUI();
 const sketch = (p) => {
     p.preload = () => {
         handlerAsset.add('spacecraft_player', p.loadImage('./public/assets/spacecraft/spacecraft.gif'));
+        handlerAsset.add('spacecraft_enemy1', p.loadImage('./public/assets/spacecraft/enemy1.gif'));
     }
 
     p.setup = () => {
-        p.createCanvas(window.innerWidth, window.innerHeight+1);
+        p.createCanvas(1100, 800);
         p.frameRate(144);
         p.background(0,0,0);
 
@@ -28,7 +29,7 @@ const sketch = (p) => {
             new DebugUI(p, handlerUI);
         }
 
-        handlerGameObject.add(new Spacecraft(p, handlerAsset, inputManager, 300, 100, 80, 40));
+        handlerGameObject.add(new Spacecraft("player", p, handlerAsset, inputManager, handlerGameObject, 300, 100, 80, 40));
     }
 
     p.draw = () => {
@@ -52,9 +53,7 @@ const sketch = (p) => {
         inputManager.keyPress('pause', p.keyIsDown(27));
     }
 
-    p.windowResized = () => {
-        p.resizeCanvas(window.innerWidth, window.innerHeight+1);
-    }
+    
 }
 
 new p5(sketch);
