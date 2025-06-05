@@ -68,6 +68,8 @@ const sketch = (p) => {
 
     // actualizar nivel (spawnear enemigos escalonadamente)
     levelManager.update();
+    levelManager.checkLevelProgression();
+    levelManager.drawTransition();
 
     // actualizar gameobjects
     handlerGameObject.handler.forEach((gameObjectElement) => {
