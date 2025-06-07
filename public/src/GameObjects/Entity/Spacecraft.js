@@ -26,7 +26,7 @@ export default class Spacecraft extends GameObject {
     );
 
     this.asset = handlerAsset.get("spacecraft_player");
-    this.lives = 23;
+    this.lives = 3;
     this.lastShot = 0;
   }
 
