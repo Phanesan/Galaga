@@ -28,7 +28,7 @@ export default class EnemyTwo extends GameObject {
     // recordar cambiar sprite
     this.asset = handlerAsset.get("spacecraft_enemy2");
     // que vida le ponemos?
-    this.health = 1;
+    this.health = 2;
     this.baseX = x;
     // punto de partida para el zigzageo
     this.timeOffset = Math.random() * 1000;
