@@ -26,7 +26,7 @@ export default class Spacecraft extends GameObject {
     );
 
     this.asset = handlerAsset.get("spacecraft_player");
-    this.lives = 3;
+    this.lives = 23;
     this.lastShot = 0;
   }
 
@@ -80,6 +80,7 @@ export default class Spacecraft extends GameObject {
 
   collision(object) {
     if (object instanceof Bullet && object.owner === "enemy") {
+      //console.log("collision");
       this.lives--;
       object.isDestroyed = true;
       if (this.lives <= 0) {

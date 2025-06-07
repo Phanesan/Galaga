@@ -24,9 +24,15 @@ export default class LevelManager {
 
     this.levelCleared = false;
     this.bossSpawned = false;
+    this.gameWon = false;
   }
 
   loadLevel(level) {
+    if (level > 3) {
+      this.showGameWonScreen();
+      return;
+    }
+
     this.currentLevel = level;
     this.lastSpawnTime = this.p5.millis();
     this.levelCleared = false;
@@ -48,12 +54,17 @@ export default class LevelManager {
       ];
     }
 
-    // mah nivele parce
     this.transitionMessage = `Nivel ${level}`;
     this.transitionTimer = this.p5.millis();
   }
 
   update() {
+    // Mostrar pantalla de victoria si el juego fue ganado
+    if (this.gameWon) {
+      this.showGameWonScreen();
+      return;
+    }
+
     // mostrar transicion
     if (
       this.transitionMessage &&
@@ -156,6 +167,31 @@ export default class LevelManager {
       .some((obj) => obj.name === "enemyBoss" && !obj.isDestroyed);
   }
 
+  showGameWonScreen() {
+    this.p5.push();
+    
+    // Fondo semitransparente
+    this.p5.fill(0, 0, 0, 200);
+    this.p5.rect(0, 0, this.p5.width, this.p5.height);
+    
+    // Texto principal
+    this.p5.fill(255, 215, 0); // Color dorado
+    this.p5.textAlign(this.p5.CENTER, this.p5.CENTER);
+    this.p5.textSize(64);
+    this.p5.text("¡VICTORIA!", this.p5.width / 2, this.p5.height / 2 - 100);
+    
+    // Mensaje secundario
+    this.p5.fill(255);
+    this.p5.textSize(32);
+    this.p5.text("Has completado todos los niveles", this.p5.width / 2, this.p5.height / 2);
+    
+    // Puntuación o información adicional
+    this.p5.textSize(24);
+    this.p5.text("¡Felicidades, has derrotado al jefe final!", this.p5.width / 2, this.p5.height / 2 + 60);
+    
+    this.p5.pop();
+  }
+
   checkLevelProgression() {
     if (this.levelCleared) return;
 
@@ -188,12 +224,20 @@ export default class LevelManager {
     if (this.isLevelCleared() && (!this.bossSpawned || this.bossDefeated())) {
       this.levelCleared = true;
 
-      this.transitionMessage = "¡Nivel superado!";
+      if (this.currentLevel === 3) {
+        this.gameWon = true;
+        this.transitionMessage = "¡Juego completado!";
+      } else {
+        this.transitionMessage = "¡Nivel superado!";
+      }
+      
       this.transitionTimer = this.p5.millis();
 
-      setTimeout(() => {
-        this.loadLevel(this.currentLevel + 1);
-      }, this.transitionDuration + 800);
+      if (!this.gameWon) {
+        setTimeout(() => {
+          this.loadLevel(this.currentLevel + 1);
+        }, this.transitionDuration + 800);
+      }
     }
   }
 }

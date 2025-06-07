@@ -12,7 +12,7 @@ export default class Version extends UIElement {
     draw() {
         this.p5.textSize(20);
         this.p5.fill(255, 255, 255, 70);
-        this.p5.text(`Version: 0.1`, this.x, this.y);
+        this.p5.text(`Version: 1.0`, this.x, this.y);
     }
 
     update() {}

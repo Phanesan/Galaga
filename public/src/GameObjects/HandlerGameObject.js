@@ -9,6 +9,11 @@ export default class HandlerGameObject {
         this.handler.push(gameObjectElement);
     }
 
+    getName(name) {
+        console.log(this.handler);
+        return this.handler.find(element => element.name == name);
+    }
+
     remove(gameObjectElement) {
         this.handler.splice(this.handler.indexOf(gameObjectElement), 1);
     }

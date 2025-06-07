@@ -47,7 +47,7 @@ const sketch = (p) => {
     p.background(0);
 
     if (debug) {
-      new DebugUI(p, handlerUI);
+      new DebugUI(p, handlerUI, handlerGameObject);
     }
 
     // crear jugador
@@ -58,8 +58,8 @@ const sketch = (p) => {
         handlerAsset,
         inputManager,
         handlerGameObject,
-        300,
-        100,
+        500,
+        700,
         60,
         40
       )
@@ -72,7 +72,7 @@ const sketch = (p) => {
       inputManager,
       handlerGameObject
     );
-    levelManager.loadLevel(1);
+    levelManager.loadLevel(3);
   };
 
   p.draw = () => {
@@ -101,8 +101,8 @@ const sketch = (p) => {
     // Input
     inputManager.keyPress("moveLeft", p.keyIsDown(65));
     inputManager.keyPress("moveRight", p.keyIsDown(68));
-    inputManager.keyPress("moveUp", p.keyIsDown(87));
-    inputManager.keyPress("moveDown", p.keyIsDown(83));
+    //inputManager.keyPress("moveUp", p.keyIsDown(87));
+    //inputManager.keyPress("moveDown", p.keyIsDown(83));
   };
 };
 
