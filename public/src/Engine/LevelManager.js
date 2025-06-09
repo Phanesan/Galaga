@@ -12,9 +12,7 @@ export default class LevelManager {
 
     this.currentLevel = 0;
 
-    // cola de enemigos a generar
     this.enemiesQueue = [];
-    // tiempo en ms entre enemigos
     this.spawnInterval = 1000;
     this.lastSpawnTime = 0;
 
@@ -25,6 +23,8 @@ export default class LevelManager {
     this.levelCleared = false;
     this.bossSpawned = false;
     this.gameWon = false;
+
+    this.score = 0; // 🟢 sistema de puntaje
   }
 
   loadLevel(level) {
@@ -38,7 +38,6 @@ export default class LevelManager {
     this.levelCleared = false;
     this.bossSpawned = false;
 
-    // cantidad de enemigos y cuales
     if (level === 1) {
       this.enemiesQueue = Array(10).fill("EnemyOne");
     } else if (level === 2) {
@@ -59,13 +58,11 @@ export default class LevelManager {
   }
 
   update() {
-    // Mostrar pantalla de victoria si el juego fue ganado
     if (this.gameWon) {
       this.showGameWonScreen();
       return;
     }
 
-    // mostrar transicion
     if (
       this.transitionMessage &&
       this.p5.millis() - this.transitionTimer < this.transitionDuration
@@ -80,11 +77,20 @@ export default class LevelManager {
         this.p5.height / 2
       );
       this.p5.pop();
-      // durante la transición no spawn
       return;
     }
 
-    // generacion escalonada usando la cola
+    // puntos
+    this.handlerGameObject.getHandler().forEach((obj) => {
+      if (obj.name.startsWith("enemy") && obj.isDestroyed && !obj.scored) {
+        obj.scored = true;
+        if (obj instanceof EnemyOne) this.score += 100;
+        else if (obj instanceof EnemyTwo) this.score += 200;
+        else if (obj instanceof EnemyThree) this.score += 300;
+        else if (obj instanceof EnemyBoss) this.score += 1000;
+      }
+    });
+
     if (this.enemiesQueue.length > 0) {
       const now = this.p5.millis();
       if (now - this.lastSpawnTime >= this.spawnInterval) {
@@ -93,20 +99,16 @@ export default class LevelManager {
       }
     }
 
-    // progresion de nivel
     this.checkLevelProgression();
   }
 
   spawnEnemy() {
-    // posición X aleatoria con margen
     const x = this.p5.random(50, this.p5.width - 130);
-    // fuera de pantalla, arriba
     const y = -50;
 
     if (this.enemiesQueue.length === 0) return;
 
-    const enemyType = this.enemiesQueue.shift(); // sacamos el primer enemigo de la cola
-
+    const enemyType = this.enemiesQueue.shift();
     let enemy;
 
     if (enemyType === "EnemyOne") {
@@ -156,12 +158,10 @@ export default class LevelManager {
     const remainingEnemies = this.handlerGameObject
       .getHandler()
       .filter((obj) => obj.name.startsWith("enemy") && !obj.isDestroyed);
-
     return this.enemiesQueue.length === 0 && remainingEnemies.length === 0;
   }
 
   bossDefeated() {
-    // Devuelve true si no hay jefe o está destruido
     return !this.handlerGameObject
       .getHandler()
       .some((obj) => obj.name === "enemyBoss" && !obj.isDestroyed);
@@ -169,33 +169,61 @@ export default class LevelManager {
 
   showGameWonScreen() {
     this.p5.push();
-    
-    // Fondo semitransparente
+
     this.p5.fill(0, 0, 0, 200);
     this.p5.rect(0, 0, this.p5.width, this.p5.height);
-    
-    // Texto principal
-    this.p5.fill(255, 215, 0); // Color dorado
+
+    this.p5.fill(255, 215, 0);
     this.p5.textAlign(this.p5.CENTER, this.p5.CENTER);
     this.p5.textSize(64);
     this.p5.text("¡VICTORIA!", this.p5.width / 2, this.p5.height / 2 - 100);
-    
-    // Mensaje secundario
+
     this.p5.fill(255);
     this.p5.textSize(32);
-    this.p5.text("Has completado todos los niveles", this.p5.width / 2, this.p5.height / 2);
-    
-    // Puntuación o información adicional
+    this.p5.text(
+      "Has completado todos los niveles",
+      this.p5.width / 2,
+      this.p5.height / 2
+    );
+
     this.p5.textSize(24);
-    this.p5.text("¡Felicidades, has derrotado al jefe final!", this.p5.width / 2, this.p5.height / 2 + 60);
-    
+    this.p5.text(
+      "¡Felicidades, has derrotado al jefe final!",
+      this.p5.width / 2,
+      this.p5.height / 2 + 60
+    );
+
     this.p5.pop();
+
+    // Crear input si no existe aún
+    if (!this.nameInput) {
+      this.nameInput = this.p5.createInput("");
+      this.nameInput.position(
+        this.p5.width / 2 - 100,
+        this.p5.height / 2 + 100
+      );
+      this.nameInput.size(200);
+      this.nameInput.attribute("placeholder", "Ingresa tu nombre");
+
+      this.submitButton = this.p5.createButton("Guardar puntaje");
+      this.submitButton.position(
+        this.p5.width / 2 - 80,
+        this.p5.height / 2 + 140
+      );
+
+      this.submitButton.mousePressed(() => {
+        const playerName = this.nameInput.value().trim() || "Jugador";
+        this.saveHighScore(playerName);
+        this.nameInput.remove();
+        this.submitButton.remove();
+        window.location.href = "index.html"; // o el nombre de tu menú
+      });
+    }
   }
 
   checkLevelProgression() {
     if (this.levelCleared) return;
 
-    // spawnear jefe en caso de que no hayan enemigos en lvl 3
     if (
       this.currentLevel === 3 &&
       this.enemiesQueue.length === 0 &&
@@ -220,7 +248,6 @@ export default class LevelManager {
       return;
     }
 
-    // nivel terminado si no quedan enemigos ni jefe
     if (this.isLevelCleared() && (!this.bossSpawned || this.bossDefeated())) {
       this.levelCleared = true;
 
@@ -230,7 +257,7 @@ export default class LevelManager {
       } else {
         this.transitionMessage = "¡Nivel superado!";
       }
-      
+
       this.transitionTimer = this.p5.millis();
 
       if (!this.gameWon) {
@@ -239,5 +266,17 @@ export default class LevelManager {
         }, this.transitionDuration + 800);
       }
     }
+  }
+  saveHighScore(name) {
+    const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+
+    // Guardar score actual
+    highScores.push({ name, score: this.score });
+
+    // Ordenar y limitar a top 5
+    highScores.sort((a, b) => b.score - a.score);
+    const topFive = highScores.slice(0, 5);
+
+    localStorage.setItem("highScores", JSON.stringify(topFive));
   }
 }

@@ -72,7 +72,7 @@ const sketch = (p) => {
       inputManager,
       handlerGameObject
     );
-    levelManager.loadLevel(1);
+    levelManager.loadLevel(3);
   };
 
   p.draw = () => {

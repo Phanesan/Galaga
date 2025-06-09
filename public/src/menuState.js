@@ -109,6 +109,20 @@ const menuSketch = (p) => {
         window.location.href = "core.html";
       }
     }
+
+    // Mostrar top 5 puntajes
+    const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+
+    p.fill(255);
+    p.textAlign(p.CENTER);
+    p.textSize(20);
+    p.text("TOP 5 PUNTAJES", p.width / 2, p.height - 200);
+
+    p.textSize(16);
+    highScores.forEach((entry, index) => {
+      const texto = `${index + 1}. ${entry.name} - ${entry.score}`;
+      p.text(texto, p.width / 2, p.height - 170 + index * 22);
+    });
   };
 
   p.mousePressed = () => {
